@@ -15,3 +15,7 @@
 #### - https://www.youtube.com/watch?v=IathdVB65Lw
 
 #### - https://www.youtube.com/watch?v=MvNyJohJdSc
+
+### routers
+
+#### Since the vidoe i studied router doesn't provide any sound so i don't know exact syntax of using router
