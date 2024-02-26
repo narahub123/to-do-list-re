@@ -1,5 +1,9 @@
 import Sidebar from "./components/Sidebar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Monthly from "./pages/Monthly";
+import Weekly from "./pages/Weekly";
+import Daily from "./pages/Daily";
+import Login from "./pages/Login";
 
 function App() {
   return (
