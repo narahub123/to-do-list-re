@@ -5,6 +5,7 @@ import MonthlyDashboard from "./pages/MonthlyDashboard";
 import WeeklyDashboard from "./pages/WeeklyDashboard";
 import DailyDashboard from "./pages/DailyDashboard";
 import Settings from "./pages/Settings";
+import "./App.css";
 
 const App = () => {
   return (

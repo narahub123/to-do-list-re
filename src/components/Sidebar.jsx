@@ -1,4 +1,5 @@
 import React, { createContext } from "react";
+import "../App.css";
 import {
   BsCalendarMonth,
   BsCalendarWeek,
@@ -11,28 +12,29 @@ import { FaRegUser } from "react-icons/fa";
 
 import { NavLink } from "react-router-dom";
 import { FiMoreVertical } from "react-icons/fi";
+import SidebarItem from "./SidebarItem";
 
 const Sidebar = ({ children }) => {
   const menuItem = [
     {
       path: "/",
       name: "monthly",
-      icon: <BsCalendarMonth />,
+      icon: <BsCalendarMonth size={20} />,
     },
     {
       path: "/weekly",
       name: "weekly",
-      icon: <BsCalendarWeek />,
+      icon: <BsCalendarWeek size={20} />,
     },
     {
       path: "/daily",
       name: "daily",
-      icon: <BsCalendarDate />,
+      icon: <BsCalendarDate size={20} />,
     },
     {
       path: "/settings",
       name: "settings",
-      icon: <LuSettings />,
+      icon: <LuSettings size={20} />,
     },
   ];
   return (
@@ -40,7 +42,7 @@ const Sidebar = ({ children }) => {
       <aside className="sidebar bg-violet-300 h-screen">
         <menu className="menu h-full flex flex-col bg-white border-r shadow-sm">
           <section className="top-section p-4 pb-2 flex justify-between items-center">
-            <div className="logo flex align-center items-center">
+            <div className="logo overflow-hidden transition-all flex align-center items-center w-44 ml-1">
               <BsListCheck size={20} className="mr-2" />
               <h1 className="text-sm">To Do List</h1>
             </div>
@@ -49,7 +51,7 @@ const Sidebar = ({ children }) => {
             </button>
           </section>
 
-          <nav>
+          <nav className="h-full">
             {menuItem.map((item, index) => (
               <NavLink
                 to={item.path}
@@ -57,16 +59,14 @@ const Sidebar = ({ children }) => {
                 className="link"
                 activeclassname="active"
               >
-                <div className="icon">{item.icon}</div>
-                <div className="link_text">{item.name}</div>
+                <SidebarItem icon={item.icon} text={item.name} />
               </NavLink>
             ))}
-            <div className="h-full" />
           </nav>
 
           <section className="bottom-section border-t flex p-3">
-            <FaRegUser className="w-10 h-10 rounded-md" />
-            <div className="userinfo-container flex justify-between items-center">
+            <FaRegUser className="w-10 h-10" />
+            <div className="userinfo-container flex justify-between items-center w-44 ml-3">
               <div className="userinfo leading-4">
                 <h4 className="username font-semibold">John Doe</h4>
                 <span className="useremail text-xs text-gray-600">
