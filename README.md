@@ -19,3 +19,7 @@
 ### routers
 
 #### Since the vidoe i studied router doesn't provide any sound so i don't know exact syntax of using router
+
+### design modification 
+#### inpiration 
+#### https://www.youtube.com/watch?v=NFrFhBJPTmI
