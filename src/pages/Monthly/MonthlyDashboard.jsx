@@ -5,7 +5,7 @@ const MonthlyDashboard = () => {
     <div>
       <h1>Monthly Dashboard</h1>
     </div>
-  )
+  );
 }
 
 export default MonthlyDashboard
