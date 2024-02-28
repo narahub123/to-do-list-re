@@ -10,9 +10,11 @@ import { LuChevronFirst, LuSettings } from "react-icons/lu";
 
 import { FiMoreVertical } from "react-icons/fi";
 import SidebarItem from "./SidebarItem";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
-const Sidebar = () => {
+const Sidebar = ({ children }) => {
+  const location = useLocation();
+
   const menuItem = [
     {
       path: "/",
@@ -53,7 +55,11 @@ const Sidebar = () => {
           <nav className="menus h-full">
             {menuItem.map((item, index) => (
               <NavLink to={item.path} key={index} className="item-link">
-                <SidebarItem icon={item.icon} name={item.name} />
+                <SidebarItem
+                  icon={item.icon}
+                  name={item.name}
+                  active={location.pathname === item.path}
+                />
               </NavLink>
             ))}
           </nav>
@@ -72,7 +78,7 @@ const Sidebar = () => {
           </section>
         </menu>
       </aside>
-      <main className="kanban"></main>
+      <main className="kanban">{children}</main>
     </div>
   );
 };
