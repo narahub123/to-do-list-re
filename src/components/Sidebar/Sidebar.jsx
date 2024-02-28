@@ -15,7 +15,7 @@ import { NavLink, useLocation } from "react-router-dom";
 export const SidebarContext = createContext();
 const Sidebar = ({ children }) => {
   const location = useLocation();
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   const menuItem = [
     {
@@ -63,7 +63,6 @@ const Sidebar = ({ children }) => {
                   size={20}
                 />
               ) : (
-                // <LuChevronLast className="toggle-button" size={20} />
                 <LuChevronFirst
                   className="toggle-button transform rotate-180 duration-500"
                   size={20}
@@ -104,7 +103,9 @@ const Sidebar = ({ children }) => {
           </section>
         </menu>
       </aside>
-      <main className="kanban">{children}</main>
+      <main className="kanban h-screen w-full bg-neutral-900 text-neutral-50">
+        {children}
+      </main>
     </div>
   );
 };

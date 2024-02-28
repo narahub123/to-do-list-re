@@ -41,3 +41,21 @@
 #### inpiration
 
 #### https://www.youtube.com/watch?v=NFrFhBJPTmI
+
+### Sidebar styling
+
+### Sidebar : active
+
+### Sidebar : toggle
+
+### Sidebar : floating labels
+
+## Monthly Dashboard
+
+### MonthlyHeader
+
+#### by default it shows current month
+
+#### if carousel is used, button changes the number of month and it will change name of month from MONTHS data
+
+![image](https://github.com/narahub123/to-do-list-re/assets/93567002/cf5c144b-fcda-48aa-9d53-9fed5a0c610f)

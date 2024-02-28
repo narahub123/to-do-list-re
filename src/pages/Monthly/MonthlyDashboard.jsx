@@ -1,11 +1,19 @@
-import React from 'react'
+import React, { useState } from "react";
+import MonthlyHeader from "./MonthlyHeader";
+import { MONTHS } from "../../data/MONTHS";
 
 const MonthlyDashboard = () => {
-  return (
-    <div>
-      <h1>Monthly Dashboard</h1>
-    </div>
-  );
-}
+  const today = new Date();
+  const thisMonth = today.getMonth();
+  const [month, setMonth] = useState(MONTHS[thisMonth]);
 
-export default MonthlyDashboard
+  console.log(MONTHS[month]);
+
+  return (
+    <>
+      <MonthlyHeader month={month} />
+    </>
+  );
+};
+
+export default MonthlyDashboard;
