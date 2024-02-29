@@ -59,3 +59,12 @@
 #### if carousel is used, button changes the number of month and it will change name of month from MONTHS data
 
 ![image](https://github.com/narahub123/to-do-list-re/assets/93567002/cf5c144b-fcda-48aa-9d53-9fed5a0c610f)
+
+### MonthlyDashboard column header
+
+#### show nth week and first and last day of the week
+
+#### show number of plans of the week
+
+#### responsive element which show larger than specific width
+![161](https://github.com/narahub123/to-do-list-re/assets/93567002/83eb85a5-d32e-4794-9070-0e3c673f6c61)

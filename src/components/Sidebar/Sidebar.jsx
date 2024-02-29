@@ -41,7 +41,7 @@ const Sidebar = ({ children }) => {
   ];
 
   return (
-    <div className="container flex">
+    <div className="flex">
       <aside className="sidebar h-screen">
         <menu className="sidebar-menu h-full flex flex-col bg--white border-r shadow-sm">
           <section className="top-section p-4 pb-2 flex justify-between items-center">
@@ -103,7 +103,7 @@ const Sidebar = ({ children }) => {
           </section>
         </menu>
       </aside>
-      <main className="kanban h-screen w-full bg-neutral-900 text-neutral-50">
+      <main className="kanban w-full bg-neutral-50 text-neutral-900">
         {children}
       </main>
     </div>
