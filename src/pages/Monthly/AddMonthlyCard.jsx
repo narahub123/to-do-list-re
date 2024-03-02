@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { FiPlus, FiPlusCircle, FiMinusCircle } from "react-icons/fi";
 import { InputText, InputDate } from "./Input";
 import {
@@ -6,6 +6,7 @@ import {
   formatDotDate,
   formatDateDate,
 } from "../../util/formatDate";
+import MonthlyValidationModal from "./Modal/MonthlyValidationModal";
 
 const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
   const [adding, setAdding] = useState(false);
@@ -16,6 +17,11 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
     end: new Date(week.sunday),
     todos: todoInputs,
   });
+
+  const [outOfRange, setOutOfRange] = useState(false);
+  const [exceedEnd, setExceedEnd] = useState(false);
+
+  const validationModal = useRef();
 
   const handleAddToDo = () => {
     setTodoInputs([...todoInputs, ""]);
@@ -59,32 +65,35 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
 
     // validation
     if (subject === "") {
-      console.log("subject warning");
-
+      validationModal.current.open();
       return;
     }
 
+    console.log(start);
+    console.log(new Date(week.monday));
     if (start < new Date(week.monday)) {
-      console.log("start warning");
-
+      setOutOfRange(true);
+      validationModal.current.open();
       return;
     }
 
     if (end > new Date(week.sunday)) {
-      console.log("end warning");
-
+      setOutOfRange(true);
+      validationModal.current.open();
       return;
     }
 
     if (start > end) {
-      console.log("overflow warning");
+      setExceedEnd(true);
+      validationModal.current.open();
 
       return;
     }
+
     for (let todo of todos) {
       console.log("todo", todo);
       if (todo === "") {
-        console.log("todos warning");
+        validationModal.current.open();
         return;
       }
     }
@@ -99,11 +108,43 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
     setAdding(false);
   };
 
-  console.log(todoInputs.length);
   return (
     <>
       {adding ? (
         <>
+          {outOfRange ? (
+            <MonthlyValidationModal
+              ref={validationModal}
+              buttonCaption="okay"
+              title="Out Of Range"
+              situation="Oops ... looks like you set a date out of range"
+              information="Please make sure you set a date within the week."
+              setOutOfRange={setOutOfRange}
+              setExceedEnd={setExceedEnd}
+            ></MonthlyValidationModal>
+          ) : exceedEnd ? (
+            <MonthlyValidationModal
+              ref={validationModal}
+              buttonCaption="okay"
+              title="Exceed End Date"
+              situation="Oops ... looks like the start date exceeds the end date"
+              information="Please make sure you set the start date equal to or earlier than
+                the end date"
+              setOutOfRange={setOutOfRange}
+              setExceedEnd={setExceedEnd}
+            ></MonthlyValidationModal>
+          ) : (
+            <MonthlyValidationModal
+              ref={validationModal}
+              buttonCaption="okay"
+              title="Invalid Input"
+              situation="Oops ... looks like you forget to enter a value"
+              information="Please make sure you provide a valid value for every input field"
+              setOutOfRange={setOutOfRange}
+              setExceedEnd={setExceedEnd}
+            ></MonthlyValidationModal>
+          )}
+
           <form onSubmit={handleSumbmit}>
             <div
               key={column}
@@ -132,7 +173,6 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
               />
 
               {todoInputs.map((todoInput, index) => {
-                console.log("index", index);
                 return (
                   <div className="flex">
                     <InputText
