@@ -90,8 +90,7 @@ export const weeksInMonth = [];
 
 for (let i = 0; i < mondays.length; i++) {
   const monday = formatDate(mondays[i]);
-  let sunday = formatDate(sundays[i]);
-  sunday = sunday.split(".")[1] + "." + sunday.split(".")[2];
+  const sunday = formatDate(sundays[i]);
   const week = {
     week: weeks[i],
     monday: monday,

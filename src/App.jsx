@@ -14,7 +14,7 @@ const App = () => {
           <Route path="/" element={<MonthlyDashboard />} />
           <Route path="/monthly" element={<WeeklyDashboard />} />
           <Route path="/weekly" element={<DailyDashboard />} />
-          <Route path="/daily" element={<MonthlyDashboard />} />
+          <Route path="/daily" element={<DailyDashboard />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </Sidebar>
