@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FiPlus, FiPlusCircle, FiMinusCircle } from "react-icons/fi";
 import { InputText, InputDate } from "./Input";
-import { formatDashDate, formatDotDate } from "../../util/formatDate";
+import {
+  formatDashDate,
+  formatDotDate,
+  formatDateDate,
+} from "../../util/formatDate";
 
 const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
   const [adding, setAdding] = useState(false);
@@ -39,7 +43,7 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
     let { name, value } = e.target;
 
     if (name === "start" || name === "end") {
-      value = new Date(value);
+      value = formatDashDate(value);
     }
 
     setInputs((prevInputs) => ({
@@ -50,19 +54,61 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
 
   const handleSumbmit = (e) => {
     e.preventDefault();
+    console.log(inputs);
+    const { subject, start, end, todos } = inputs;
+
+    // validation
+    if (subject === "") {
+      console.log("subject warning");
+
+      return;
+    }
+
+    if (start < new Date(week.monday)) {
+      console.log("start warning");
+
+      return;
+    }
+
+    if (end > new Date(week.sunday)) {
+      console.log("end warning");
+
+      return;
+    }
+
+    if (start > end) {
+      console.log("overflow warning");
+
+      return;
+    }
+    for (let todo of todos) {
+      console.log("todo", todo);
+      if (todo === "") {
+        console.log("todos warning");
+        return;
+      }
+    }
 
     setTodoInputs([""]);
+    setInputs({
+      subject: "",
+      start: new Date(week.monday),
+      end: new Date(week.sunday),
+      todos: [""],
+    });
     setAdding(false);
   };
 
-  console.log(inputs);
-
+  console.log(todoInputs.length);
   return (
     <>
       {adding ? (
         <>
           <form onSubmit={handleSumbmit}>
-            <div className="add-card w-full rounded border border-violet-400 bg-violet-400/20">
+            <div
+              key={column}
+              className="add-card w-full rounded border border-violet-400 bg-violet-400/20"
+            >
               <InputText
                 name="subject"
                 padding="py-3"
@@ -74,7 +120,6 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
                 name="start"
                 columnWidth={columnWidth}
                 placeholder="start"
-                value={week.monday}
                 date={week.monday}
                 onChange={handleInputChange}
               />
@@ -82,13 +127,12 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
                 name="end"
                 columnWidth={columnWidth}
                 placeholder="end"
-                value={week.sunday}
                 date={week.sunday}
                 onChange={handleInputChange}
               />
 
               {todoInputs.map((todoInput, index) => {
-                console.log(todoInput);
+                console.log("index", index);
                 return (
                   <div className="flex">
                     <InputText
@@ -100,16 +144,19 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
                       placeholder="add todo..."
                       onChange={(e) => handleValueChange(index, e.target.value)}
                     />
-                    {(index !== 0 ||
-                      (index === 0 && todoInputs.length > 1)) && (
-                      <button
-                        onClick={() => handleRemove(index)}
-                        className="flex justify-center items-center mr-1.5 
+                    {
+                      //
+                      ((index !== 0 && index < todoInputs.length - 1) ||
+                        (index === 0 && todoInputs.length > 1)) && (
+                        <button
+                          onClick={() => handleRemove(index)}
+                          className="flex justify-center items-center mr-1.5 
                             text-neutral-400 hover:text-neutral-600"
-                      >
-                        <FiMinusCircle />
-                      </button>
-                    )}
+                        >
+                          <FiMinusCircle />
+                        </button>
+                      )
+                    }
                   </div>
                 );
               })}

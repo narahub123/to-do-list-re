@@ -49,3 +49,13 @@ export const formatDateDot = (date) => {
   console.log(year, month, dates);
   return year + "." + month + "." + dates;
 };
+
+export const formatDateDate = (date) => {
+  date = new Date(date);
+  //   console.log(date);
+  const year = date.getFullYear();
+  let month = date.getMonth();
+  let dates = date.getDate();
+
+  return new Date(year, month, dates);
+};
