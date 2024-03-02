@@ -30,7 +30,13 @@ export const InputText = ({
   );
 };
 
-export const InputDate = ({ name, columnWidth, placeholder, date }) => {
+export const InputDate = ({
+  name,
+  columnWidth,
+  placeholder,
+  date,
+  onChange,
+}) => {
   const day = formatDotDate(date);
   // console.log(day);
   const defaultDate = formatDateDash(day);
@@ -43,6 +49,7 @@ export const InputDate = ({ name, columnWidth, placeholder, date }) => {
         placeholder={placeholder}
         className="border-0 bg-transparent text-xs text-neutral-400 focus:outline-0"
         defaultValue={defaultDate}
+        onChange={onChange}
       />
     </p>
   );

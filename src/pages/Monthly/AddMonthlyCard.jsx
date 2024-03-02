@@ -6,6 +6,12 @@ import { formatDashDate, formatDotDate } from "../../util/formatDate";
 const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
   const [adding, setAdding] = useState(false);
   const [todoInputs, setTodoInputs] = useState([""]);
+  const [inputs, setInputs] = useState({
+    subject: "",
+    start: new Date(week.monday),
+    end: new Date(week.sunday),
+    todos: todoInputs,
+  });
 
   const handleAddToDo = () => {
     setTodoInputs([...todoInputs, ""]);
@@ -17,22 +23,39 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
     setTodoInputs(newTodoInput);
   };
 
+  // todos
   const handleValueChange = (index, value) => {
-    console.log("---------------------");
     const todos = [...todoInputs];
     todos[index] = value;
     setTodoInputs(todos);
+    setInputs((prevInputs) => ({
+      ...prevInputs,
+      ["todos"]: todos,
+    }));
+  };
+
+  // subject, start, end
+  const handleInputChange = (e) => {
+    let { name, value } = e.target;
+
+    if (name === "start" || name === "end") {
+      value = new Date(value);
+    }
+
+    setInputs((prevInputs) => ({
+      ...prevInputs,
+      [name]: value,
+    }));
   };
 
   const handleSumbmit = (e) => {
     e.preventDefault();
 
-    const enteredSubject = console.log(enteredSubject);
-    const enteredTodos = todoInputs;
-    console.log(enteredTodos);
-
+    setTodoInputs([""]);
     setAdding(false);
   };
+
+  console.log(inputs);
 
   return (
     <>
@@ -45,18 +68,23 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
                 padding="py-3"
                 columnWidth={columnWidth}
                 placeholder="Add new weekly plan..."
+                onChange={handleInputChange}
               />
               <InputDate
                 name="start"
                 columnWidth={columnWidth}
                 placeholder="start"
+                value={week.monday}
                 date={week.monday}
+                onChange={handleInputChange}
               />
               <InputDate
                 name="end"
                 columnWidth={columnWidth}
                 placeholder="end"
+                value={week.sunday}
                 date={week.sunday}
+                onChange={handleInputChange}
               />
 
               {todoInputs.map((todoInput, index) => {
