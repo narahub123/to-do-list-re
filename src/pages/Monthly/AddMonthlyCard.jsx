@@ -1,17 +1,14 @@
 import React, { useRef, useState } from "react";
 import { FiPlus, FiPlusCircle, FiMinusCircle } from "react-icons/fi";
 import { InputText, InputDate } from "./Input";
-import {
-  formatDashDate,
-  formatDotDate,
-  formatDateDate,
-  formatDateDash,
-} from "../../util/formatDate";
+import { formatDashDate, formatDateDash } from "../../util/formatDate";
 import MonthlyValidationModal from "./Modal/MonthlyValidationModal";
 
 const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
   const [adding, setAdding] = useState(false);
-  const [todoInputs, setTodoInputs] = useState([""]);
+  const [todoInputs, setTodoInputs] = useState([
+    { task: "", completed: false },
+  ]);
   const [inputs, setInputs] = useState({
     subject: "",
     start: new Date(week.monday),
@@ -25,7 +22,7 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
   const validationModal = useRef();
 
   const handleAddToDo = () => {
-    setTodoInputs([...todoInputs, ""]);
+    setTodoInputs([...todoInputs, { task: "", completed: false }]);
   };
 
   const handleRemove = (index) => {
@@ -37,7 +34,7 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
   // todos
   const handleValueChange = (index, value) => {
     const todos = [...todoInputs];
-    todos[index] = value;
+    todos[index] = { ...todos[index], task: value };
     setTodoInputs(todos);
     setInputs((prevInputs) => ({
       ...prevInputs,
@@ -93,18 +90,18 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
 
     for (let todo of todos) {
       console.log("todo", todo);
-      if (todo === "") {
+      if (todo.task === "") {
         validationModal.current.open();
         return;
       }
     }
 
-    setTodoInputs([""]);
+    setTodoInputs([{ task: "", completed: false }]);
     setInputs({
       subject: "",
       start: new Date(week.monday),
       end: new Date(week.sunday),
-      todos: [""],
+      todos: [{ task: "", completed: false }],
     });
     setAdding(false);
 
@@ -115,7 +112,7 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
       {
         column: week.weekNum,
         subject,
-        start: formatDateDash(start),
+        start: formatDateDash(start).slice(5),
         end: formatDateDash(end).slice(5),
         todos,
       },
@@ -189,12 +186,12 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
 
               {todoInputs.map((todoInput, index) => {
                 return (
-                  <div className="flex">
+                  <div className="flex" key={index}>
                     <InputText
                       key={index}
                       name="todos"
                       padding="py-1.5"
-                      value={todoInput}
+                      value={todoInput.task}
                       columnWidth={columnWidth}
                       placeholder="add todo..."
                       onChange={(e) => handleValueChange(index, e.target.value)}
