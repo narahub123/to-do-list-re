@@ -5,7 +5,7 @@ const MonthlyColumnHeader = ({ week, cards, columnWidth }) => {
   return (
     <header className="column-header mb-3 flex items-center justify-between">
       <h3 className={`week font-medium text-${week.colColor}-300 `}>
-        <span>{`W${week.week} `}</span>
+        <span>{`W${week.weekNum} `}</span>
 
         {columnWidth >= 200 && (
           <span className="weekdays">{`(${week.monday} - ${sunday})`}</span>

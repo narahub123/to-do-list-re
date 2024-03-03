@@ -18,12 +18,17 @@ const MonthlyDashboard = () => {
   const [month, setMonth] = useState(controlMonth);
   const [date, setDate] = useState(controlDate);
 
+  console.log(year);
+  console.log(month);
+  console.log(date);
   const [cards, setCards] = useState([]);
 
   const filteredWeeksInMonth = getWeeksInMonth(year, month, date);
 
+  console.log(filteredWeeksInMonth);
+
   let colNum = filteredWeeksInMonth.length;
-  console.log(colNum);
+  // console.log(colNum);
   let dynamicColumn = "grid-cols-5";
   if (colNum === 6) {
     dynamicColumn = "grid-cols-6";
@@ -33,12 +38,17 @@ const MonthlyDashboard = () => {
 
   return (
     <>
-      <MonthlyHeader month={month} setMonth={setMonth} />
+      <MonthlyHeader
+        year={year}
+        setYear={setYear}
+        month={month}
+        setMonth={setMonth}
+      />
       <main
         className={`monthly-dashboard p-12 pt-2 grid ${dynamicColumn} gap-3`}
       >
         {filteredWeeksInMonth.map((week) => (
-          <MonthlyColumn week={week} key={week.week} cards={cards} />
+          <MonthlyColumn week={week} key={week.weekNum} cards={cards} />
         ))}
       </main>
     </>

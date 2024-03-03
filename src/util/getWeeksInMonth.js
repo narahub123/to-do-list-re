@@ -58,7 +58,7 @@ export const getWeeksInMonth = (year, month, date) => {
     const col_color = col_colors[i];
 
     const singelWeek = {
-      week: week,
+      weekNum: week,
       monday: monday,
       sunday: sunday,
       colColor: col_color,
