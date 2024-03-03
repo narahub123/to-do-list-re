@@ -49,6 +49,7 @@ const MonthlyDashboard = () => {
       >
         {filteredWeeksInMonth.map((week) => (
           <MonthlyColumn
+            column={week.weekNum}
             week={week}
             key={week.weekNum}
             cards={cards}

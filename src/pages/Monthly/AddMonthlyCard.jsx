@@ -113,6 +113,7 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
     setCards((prevCards) => [
       ...prevCards,
       {
+        column: week.weekNum,
         subject,
         start: formatDateDash(start),
         end: formatDateDash(end).slice(5),
@@ -161,6 +162,7 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
           <form onSubmit={handleSumbmit}>
             <div
               key={column}
+              column={week.weekNum}
               className="add-card w-full rounded border border-violet-400 bg-violet-400/20"
             >
               <InputText
