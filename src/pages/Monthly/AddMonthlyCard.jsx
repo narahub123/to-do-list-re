@@ -5,6 +5,7 @@ import {
   formatDashDate,
   formatDotDate,
   formatDateDate,
+  formatDateDash,
 } from "../../util/formatDate";
 import MonthlyValidationModal from "./Modal/MonthlyValidationModal";
 
@@ -69,8 +70,8 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
       return;
     }
 
-    console.log(start);
-    console.log(new Date(week.monday));
+    // console.log(start);
+    // console.log(new Date(week.monday));
     if (start < new Date(week.monday)) {
       setOutOfRange(true);
       validationModal.current.open();
@@ -106,6 +107,18 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
       todos: [""],
     });
     setAdding(false);
+
+    // console.log(inputs);
+
+    setCards((prevCards) => [
+      ...prevCards,
+      {
+        subject,
+        start: formatDateDash(start),
+        end: formatDateDash(end).slice(5),
+        todos,
+      },
+    ]);
   };
 
   return (

@@ -48,7 +48,12 @@ const MonthlyDashboard = () => {
         className={`monthly-dashboard p-12 pt-2 grid ${dynamicColumn} gap-3`}
       >
         {filteredWeeksInMonth.map((week) => (
-          <MonthlyColumn week={week} key={week.weekNum} cards={cards} />
+          <MonthlyColumn
+            week={week}
+            key={week.weekNum}
+            cards={cards}
+            setCards={setCards}
+          />
         ))}
       </main>
     </>
