@@ -2,10 +2,17 @@ import React, { useState } from "react";
 
 import MonthlyHeader from "./MonthlyHeader";
 import MonthlyColumn from "./MonthlyColumn";
-import { weeksInMonth } from "../../util/weekInMonth";
+// import { weeksInMonth } from "../../util/weekInMonth";
+import { getWeeksInMonth } from "../../util/getWeeksInMonth";
 
 const MonthlyDashboard = () => {
   const today = new Date();
+
+  const controlYear = today.getFullYear();
+  const controlMonth = today.getMonth();
+  const controlDate = today.getDate();
+
+  let weeksInMonth = getWeeksInMonth(controlYear, controlMonth, controlDate);
 
   const thisMonth = today.getMonth();
   const [month, setMonth] = useState(thisMonth);
