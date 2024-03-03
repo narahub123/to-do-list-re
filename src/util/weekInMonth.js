@@ -91,12 +91,13 @@ export const weeksInMonth = [];
 for (let i = 0; i < mondays.length; i++) {
   const monday = formatDate(mondays[i]);
   const sunday = formatDate(sundays[i]);
-  const week = {
+
+  const singleweek = {
     week: weeks[i],
     monday: monday,
     sunday: sunday,
     colColor: col_colors[i],
   };
 
-  weeksInMonth.push(week);
+  weeksInMonth.push(singleweek);
 }

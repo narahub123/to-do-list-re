@@ -7,7 +7,7 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
   const [active, setActive] = useState(false);
   const [columnWidth, setColumnWidth] = useState(0);
   const columnRef = useRef(null);
-
+  // console.log(week.week);
   useEffect(() => {
     function handleResize() {
       if (columnRef.current) {
@@ -44,6 +44,7 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
           return <MonthlyCard key={c.id} {...c} />;
         })}
         <AddMonthlyCard
+          key={week.week}
           column={column}
           setCards={setCards}
           week={week}
