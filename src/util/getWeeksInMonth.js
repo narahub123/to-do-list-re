@@ -8,18 +8,24 @@ export const getWeeksInMonth = (year, month, date) => {
 
   const getMondaysInMonth = (year, month) => {
     const firstDateInMonth = new Date(year, month, 1);
-    const previousMonday = new Date(
-      year,
-      month,
-      1 - firstDateInMonth.getDay() + 1
-    );
-    const previousSunday = new Date(
-      year,
-      month,
-      1 - firstDateInMonth.getDay() + 7
-    );
-    mondays.push(previousMonday);
-    sundays.push(previousSunday);
+    if (firstDateInMonth.getDay() !== 1) {
+      const previousMonday = new Date(
+        year,
+        month,
+        1 -
+          (firstDateInMonth.getDay() !== 0 ? firstDateInMonth.getDay() : 6) +
+          1
+      );
+      const previousSunday = new Date(
+        year,
+        month,
+        1 -
+          (firstDateInMonth.getDay() !== 0 ? firstDateInMonth.getDay() : 6) +
+          7
+      );
+      mondays.push(previousMonday);
+      sundays.push(previousSunday);
+    }
 
     const lastDateInMonth = new Date(year, month + 1, 0);
     const lastDateNum = lastDateInMonth.getDate();
@@ -42,6 +48,9 @@ export const getWeeksInMonth = (year, month, date) => {
   }; // getWeekNumbersInMonth() ends
   getWeekNumbersInMonth(mondays);
 
+  // console.log(mondays);
+  // console.log(sundays);
+  // console.log(weeks);
   for (let i = 0; i < mondays.length; i++) {
     const monday = formatDate(mondays[i]);
     const sunday = formatDate(sundays[i]);
