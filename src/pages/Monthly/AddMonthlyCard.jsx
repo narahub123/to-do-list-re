@@ -244,7 +244,7 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
         <button
           onClick={() => setAdding(true)}
           className="add-card flex items-center justify-center gap-1.5 
-                    w-full p-2 text-sm text-neutral-900
+                    w-full p-2 text-sm mt-0.5 text-neutral-900
                     rounded border border-neutral-900 bg-neutral-50  transition-colors 
                   hover:text-neutral-400 hover:border-neutral-400"
         >

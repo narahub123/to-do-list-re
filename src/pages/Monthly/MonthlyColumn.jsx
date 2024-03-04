@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import MonthlyColumnHeader from "./MonthlyColumnHeader";
 import MonthlyCard from "./MonthlyCard";
 import AddMonthlyCard from "./AddMonthlyCard";
+import DropIndicator from "./DropIndicator";
 
 const MonthlyColumn = ({ week, column, cards, setCards }) => {
   const [active, setActive] = useState(false);
@@ -44,6 +45,7 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
         {filteredCards.map((c) => {
           return <MonthlyCard key={c.id} colColor={week.colColor} {...c} />;
         })}
+        <DropIndicator beforeId="-1" column={column} />
         <AddMonthlyCard
           key={week.week}
           column={column}

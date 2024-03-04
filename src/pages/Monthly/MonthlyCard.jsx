@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FiEdit, FiTrash } from "react-icons/fi";
 import { LuCheckSquare, LuSquare } from "react-icons/lu";
 import CircleProgressBar from "./CircleProgressBar";
+import DropIndicator from "./DropIndicator";
 
 const MonthlyCard = ({ id, subject, todos, start, end, column, colColor }) => {
   const [completedTodos, setCompletedTodos] = useState([]);
@@ -59,6 +60,7 @@ const MonthlyCard = ({ id, subject, todos, start, end, column, colColor }) => {
 
   return (
     <>
+      <DropIndicator beforeId={id} column={column} />
       <div
         className={`card-container p-3 cursor-grab rounded border 
                   bg-neutral-50 ${boardColor}
