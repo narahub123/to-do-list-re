@@ -3,6 +3,7 @@ import { FiPlus, FiPlusCircle, FiMinusCircle } from "react-icons/fi";
 import { InputText, InputDate } from "./Input";
 import { formatDashDate, formatDateDash } from "../../util/formatDate";
 import MonthlyValidationModal from "./Modal/MonthlyValidationModal";
+import { motion } from "framer-motion";
 
 const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
   const [adding, setAdding] = useState(false);
@@ -156,7 +157,7 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
             ></MonthlyValidationModal>
           )}
 
-          <form onSubmit={handleSumbmit}>
+          <motion.form layout onSubmit={handleSumbmit}>
             <div
               key={column}
               column={week.weekNum}
@@ -238,10 +239,11 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
                 <FiPlus />
               </button>
             </div>
-          </form>
+          </motion.form>
         </>
       ) : (
-        <button
+        <motion.button
+          layout
           onClick={() => setAdding(true)}
           className="add-card flex items-center justify-center gap-1.5 
                     w-full p-2 text-sm mt-0.5 text-neutral-900
@@ -250,7 +252,7 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
         >
           <span>Add Plan</span>
           <FiPlus />
-        </button>
+        </motion.button>
       )}
     </>
   );

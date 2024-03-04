@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FiTrash } from "react-icons/fi";
 import { FaFire } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const TrashBin = ({ cards, setCards }) => {
   const [active, setActive] = useState(false);
@@ -23,7 +24,8 @@ const TrashBin = ({ cards, setCards }) => {
   return (
     <>
       {cards.length !== 0 ? (
-        <div
+        <motion.div
+          layout
           onDrop={handleDragEnd}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -37,7 +39,7 @@ const TrashBin = ({ cards, setCards }) => {
                   `}
         >
           {active ? <FaFire className="animate-bounce" /> : <FiTrash />}
-        </div>
+        </motion.div>
       ) : null}
     </>
   );

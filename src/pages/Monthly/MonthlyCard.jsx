@@ -3,6 +3,7 @@ import { FiEdit, FiTrash } from "react-icons/fi";
 import { LuCheckSquare, LuSquare } from "react-icons/lu";
 import CircleProgressBar from "./CircleProgressBar";
 import DropIndicator from "./DropIndicator";
+import { motion } from "framer-motion";
 
 const MonthlyCard = ({
   id,
@@ -70,7 +71,9 @@ const MonthlyCard = ({
   return (
     <>
       <DropIndicator beforeId={id} column={column} />
-      <div
+      <motion.div
+        layout
+        layoutId={id}
         draggable="true"
         onDragStart={(e) =>
           handleDragStart(e, { id, subject, todos, start, end, column })
@@ -119,7 +122,7 @@ const MonthlyCard = ({
             colColor={colColor}
           />
         </p>
-      </div>
+      </motion.div>
     </>
   );
 };
