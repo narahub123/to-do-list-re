@@ -70,7 +70,7 @@ const MonthlyCard = ({
 
   return (
     <>
-      <DropIndicator beforeId={id} column={column} />
+      <DropIndicator beforeId={subject} column={column} />
       <motion.div
         layout
         layoutId={id}

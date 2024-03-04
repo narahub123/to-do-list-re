@@ -43,7 +43,7 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
 
   const highlightIndicator = (e) => {
     const indicators = getIndicators();
-    // console.log(indicators);
+    console.log(indicators);
     clearHighlights(indicators);
     const el = getNearestIndicator(e, indicators);
     el.element.style.opacity = "1";
@@ -73,7 +73,7 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
       {
         offset: Number.NEGATIVE_INFINITY,
         element: indicators[indicators.length - 1],
-      }a
+      }
     );
 
     return el;
@@ -94,6 +94,37 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
   const handleDragEnd = (e) => {
     setActive(false);
     clearHighlights();
+
+    const cardId = e.dataTransfer.getData("cardId");
+
+    const indicators = getIndicators();
+    const { element } = getNearestIndicator(e, indicators);
+
+    const before = element.dataset.before || "-1";
+
+    if (before !== cardId) {
+      let copy = [...cards];
+
+      let cardToTransfer = copy.find((c) => c.subject === cardId);
+      if (!cardToTransfer) return;
+
+      cardToTransfer = { ...cardToTransfer, column };
+
+      copy = copy.filter((c) => c.subject !== cardId);
+
+      const moveToBack = before === "-1";
+
+      if (moveToBack) {
+        copy.push(cardToTransfer);
+      } else {
+        const insertAtIndex = copy.findIndex((el) => el.subject === before);
+        if (insertAtIndex === undefined) return;
+
+        copy.splice(insertAtIndex, 0, cardToTransfer);
+      }
+
+      setCards(copy);
+    }
   };
 
   let colColor = "";
