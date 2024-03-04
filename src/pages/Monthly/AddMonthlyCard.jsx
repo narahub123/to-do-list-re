@@ -58,7 +58,7 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
 
   const handleSumbmit = (e) => {
     e.preventDefault();
-    console.log(inputs);
+    // console.log(inputs);
     const { subject, start, end, todos } = inputs;
 
     // validation
@@ -89,7 +89,7 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
     }
 
     for (let todo of todos) {
-      console.log("todo", todo);
+      // console.log("todo", todo);
       if (todo.task === "") {
         validationModal.current.open();
         return;

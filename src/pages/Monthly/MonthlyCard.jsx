@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { FiEdit, FiTrash } from "react-icons/fi";
 import { LuCheckSquare, LuSquare } from "react-icons/lu";
+import CircleProgressBar from "./CircleProgressBar";
 
-const MonthlyCard = ({ id, subject, todos, start, end, column }) => {
+const MonthlyCard = ({ id, subject, todos, start, end, column, colColor }) => {
   const [completedTodos, setCompletedTodos] = useState([]);
 
   const toggleTodoCompletion = (index) => {
@@ -24,12 +25,44 @@ const MonthlyCard = ({ id, subject, todos, start, end, column }) => {
   //   console.log(todos[completedTodo]);
   // }
 
+  // console.log(colColor);
+  let boardColor = "border-neutral-700 hover:border-neutral-300";
+
+  if (colColor === "red") {
+    boardColor =
+      "border-red-500 hover:border-red-300 group-hover:border-red-300";
+  } else if (colColor === "yellow") {
+    boardColor =
+      "border-yellow-500 hover:border-yellow-300 group-hover:border-yellow-300";
+  } else if (colColor === "blue") {
+    boardColor =
+      "border-blue-500 hover:border-blue-300 group-hover:border-blue-300";
+  } else if (colColor === "emerald") {
+    boardColor =
+      "border-emerald-500 hover:border-emerald-300 group-hover:border-emerald-300";
+  } else if (colColor === "green") {
+    boardColor =
+      "border-green-500 hover:border-green-300 group-hover:border-green-300";
+  } else if (colColor === "neutral") {
+    boardColor =
+      "border-red-500 hover:border-red-300 group-hover:border-neutral-300";
+  }
+
+  let todosSize = todos.length;
+  let trueCount = 0;
+  for (let todo of todos) {
+    if (todo.completed === true) {
+      trueCount++;
+    }
+  }
+  let percentage = Math.floor((trueCount / todosSize) * 100);
+
   return (
     <>
       <div
-        className="card-container p-3 cursor-grab rounded border 
-                 border-neutral-700 bg-neutral-50 
-                   active:cursor-grabbing hover:border-neutral-500"
+        className={`card-container p-3 cursor-grab rounded border 
+                  bg-neutral-50 ${boardColor}
+                   active:cursor-grabbing group`}
       >
         <div className="card-header flex items-center justify-between">
           <p className="subject text-base text-neutral-700">{subject}</p>
@@ -38,7 +71,7 @@ const MonthlyCard = ({ id, subject, todos, start, end, column }) => {
             <FiTrash className="card-delete hover:text-neutral-500" />
           </p>
         </div>
-        <p className="card-date border-b-2 text-right border-neutral-400 pl-0.5">
+        <p className={`card-date border-b-2 text-right pl-0.5 ${boardColor}`}>
           <span className="start-date text-xs pr-0.5 text-neutral-500">
             {start}
           </span>
@@ -64,6 +97,13 @@ const MonthlyCard = ({ id, subject, todos, start, end, column }) => {
             </span>
           </p>
         ))}
+        <p className="flex justify-center">
+          <CircleProgressBar
+            percentage={percentage}
+            circleWidth="80"
+            colColor={colColor}
+          />
+        </p>
       </div>
     </>
   );
