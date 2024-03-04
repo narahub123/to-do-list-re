@@ -3,6 +3,7 @@ import MonthlyColumnHeader from "./MonthlyColumnHeader";
 import MonthlyCard from "./MonthlyCard";
 import AddMonthlyCard from "./AddMonthlyCard";
 import DropIndicator from "./DropIndicator";
+import TrashBin from "./TrashBin";
 
 const MonthlyColumn = ({ week, column, cards, setCards }) => {
   const [active, setActive] = useState(false);
@@ -53,6 +54,7 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
           week={week}
           columnWidth={columnWidth}
         />
+        <TrashBin cards={filteredCards} setCards={setCards} />
       </div>
     </section>
   );
