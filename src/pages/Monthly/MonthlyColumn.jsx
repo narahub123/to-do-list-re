@@ -12,7 +12,7 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
     function handleResize() {
       if (columnRef.current) {
         const width = columnRef.current.offsetWidth;
-        console.log(width);
+        // console.log(width);
         setColumnWidth(width);
       }
     }

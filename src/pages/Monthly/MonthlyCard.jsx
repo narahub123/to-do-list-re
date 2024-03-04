@@ -18,11 +18,11 @@ const MonthlyCard = ({ id, subject, todos, start, end, column }) => {
     }
   };
 
-  console.log(completedTodos);
+  // console.log(completedTodos);
 
-  for (let completedTodo of completedTodos) {
-    console.log(todos[completedTodo]);
-  }
+  // for (let completedTodo of completedTodos) {
+  //   console.log(todos[completedTodo]);
+  // }
 
   return (
     <>

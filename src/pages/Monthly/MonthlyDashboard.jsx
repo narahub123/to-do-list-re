@@ -18,14 +18,14 @@ const MonthlyDashboard = () => {
   const [month, setMonth] = useState(controlMonth);
   const [date, setDate] = useState(controlDate);
 
-  console.log(year);
-  console.log(month);
-  console.log(date);
+  // console.log(year);
+  // console.log(month);
+  // console.log(date);
   const [cards, setCards] = useState([]);
 
   const filteredWeeksInMonth = getWeeksInMonth(year, month, date);
 
-  console.log(filteredWeeksInMonth);
+  // console.log(filteredWeeksInMonth);
 
   let colNum = filteredWeeksInMonth.length;
   // console.log(colNum);
