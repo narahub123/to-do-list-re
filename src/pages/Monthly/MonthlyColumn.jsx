@@ -4,6 +4,7 @@ import MonthlyCard from "./MonthlyCard";
 import AddMonthlyCard from "./AddMonthlyCard";
 import DropIndicator from "./DropIndicator";
 import TrashBin from "./TrashBin";
+import { formatDateDash } from "../../util/formatDate";
 
 const MonthlyColumn = ({ week, column, cards, setCards }) => {
   const [active, setActive] = useState(false);
@@ -43,7 +44,7 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
 
   const highlightIndicator = (e) => {
     const indicators = getIndicators();
-    console.log(indicators);
+    // console.log(indicators);
     clearHighlights(indicators);
     const el = getNearestIndicator(e, indicators);
     el.element.style.opacity = "1";
@@ -91,7 +92,7 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
     clearHighlights();
   };
 
-  const handleDragEnd = (e) => {
+  const handleDragEnd = (e, card) => {
     setActive(false);
     clearHighlights();
 
@@ -106,10 +107,22 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
       let copy = [...cards];
 
       let cardToTransfer = copy.find((c) => c.subject === cardId);
+      console.log(cardToTransfer);
+      console.log(column);
+      console.log(week.monday);
+      console.log(week.sunday);
+      let start = "";
+      let end = "";
+      if (cardToTransfer.column !== column) {
+        console.log("different column"); // modal ?
+        console.log(formatDateDash(new Date(week.monday)).slice(5));
+        start = formatDateDash(new Date(week.monday)).slice(5);
+        end = formatDateDash(new Date(week.sunday)).slice(5);
+      }
       if (!cardToTransfer) return;
 
-      cardToTransfer = { ...cardToTransfer, column };
-
+      cardToTransfer = { ...cardToTransfer, column, start, end };
+      console.log(cardToTransfer);
       copy = copy.filter((c) => c.subject !== cardId);
 
       const moveToBack = before === "-1";
@@ -143,41 +156,43 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
   }
 
   return (
-    <section className="column" ref={columnRef}>
-      <MonthlyColumnHeader
-        week={week}
-        cards={filteredCards}
-        columnWidth={columnWidth}
-      />
-      <div
-        onDrop={handleDragEnd}
-        onDragLeave={handleDragLeave}
-        onDragOver={handleDragOver}
-        className={`column-body h-screen transition-colors ${
-          active ? colColor : "bg-neutral-800/0"
-        }`}
-      >
-        {filteredCards.map((c) => {
-          return (
-            <MonthlyCard
-              key={c.id}
-              colColor={week.colColor}
-              {...c}
-              handleDragStart={handleDragStart}
-            />
-          );
-        })}
-        <DropIndicator beforeId="-1" column={column} />
-        <AddMonthlyCard
-          key={week.week}
-          column={column}
-          setCards={setCards}
+    <>
+      <section className="column" ref={columnRef}>
+        <MonthlyColumnHeader
           week={week}
+          cards={filteredCards}
           columnWidth={columnWidth}
         />
-        <TrashBin cards={filteredCards} setCards={setCards} />
-      </div>
-    </section>
+        <div
+          onDrop={handleDragEnd}
+          onDragLeave={handleDragLeave}
+          onDragOver={handleDragOver}
+          className={`column-body h-screen transition-colors ${
+            active ? colColor : "bg-neutral-800/0"
+          }`}
+        >
+          {filteredCards.map((c) => {
+            return (
+              <MonthlyCard
+                key={c.id}
+                colColor={week.colColor}
+                {...c}
+                handleDragStart={handleDragStart}
+              />
+            );
+          })}
+          <DropIndicator beforeId="-1" column={column} />
+          <AddMonthlyCard
+            key={week.week}
+            column={column}
+            setCards={setCards}
+            week={week}
+            columnWidth={columnWidth}
+          />
+          <TrashBin cards={filteredCards} setCards={setCards} />
+        </div>
+      </section>
+    </>
   );
 };
 
