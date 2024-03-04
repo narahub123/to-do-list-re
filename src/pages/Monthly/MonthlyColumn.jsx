@@ -35,6 +35,82 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
     e.dataTransfer.setData("cardId", card.subject);
   };
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    highlightIndicator(e);
+    setActive(true);
+  };
+
+  const highlightIndicator = (e) => {
+    const indicators = getIndicators();
+    // console.log(indicators);
+    clearHighlights(indicators);
+    const el = getNearestIndicator(e, indicators);
+    el.element.style.opacity = "1";
+  };
+
+  const clearHighlights = (els) => {
+    const indicators = els || getIndicators();
+
+    indicators.forEach((i) => {
+      i.style.opacity = "0";
+    });
+  };
+  const getNearestIndicator = (e, indicators) => {
+    const DISTANCE_OFFSET = 50;
+
+    const el = indicators.reduce(
+      (closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = e.clientY - (box.top + DISTANCE_OFFSET);
+
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      },
+      {
+        offset: Number.NEGATIVE_INFINITY,
+        element: indicators[indicators.length - 1],
+      }a
+    );
+
+    return el;
+  };
+
+  const getIndicators = () => {
+    return Array.from(
+      document.querySelectorAll(`
+    [data-column="${column}"]`)
+    );
+  };
+
+  const handleDragLeave = (e) => {
+    setActive(false);
+    clearHighlights();
+  };
+
+  const handleDragEnd = (e) => {
+    setActive(false);
+    clearHighlights();
+  };
+
+  let colColor = "";
+  if (week.colColor === "red") {
+    colColor = "bg-red-800/20";
+  } else if (week.colColor === "yellow") {
+    colColor = "bg-yellow-800/20";
+  } else if (week.colColor === "blue") {
+    colColor = "bg-blue-800/20";
+  } else if (week.colColor === "emerald") {
+    colColor = "bg-emerald-800/20";
+  } else if (week.colColor === "green") {
+    colColor = "bg-green-800/20";
+  } else if (week.colColor === "neutral") {
+    colColor = "bg-neutral-800/20";
+  }
+
   return (
     <section className="column" ref={columnRef}>
       <MonthlyColumnHeader
@@ -43,8 +119,11 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
         columnWidth={columnWidth}
       />
       <div
+        onDrop={handleDragEnd}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
         className={`column-body h-screen transition-colors ${
-          active ? "bg-" + week.colColor + "-800/50" : "bg-neutral-800/0"
+          active ? colColor : "bg-neutral-800/0"
         }`}
       >
         {filteredCards.map((c) => {
