@@ -30,11 +30,11 @@ const MonthlyCard = ({
     }
   };
 
-  // console.log(completedTodos);
+  console.log(completedTodos);
 
-  // for (let completedTodo of completedTodos) {
-  //   console.log(todos[completedTodo]);
-  // }
+  for (let completedTodo of completedTodos) {
+    console.log(todos[completedTodo]);
+  }
 
   // console.log(colColor);
   let boardColor = "border-neutral-700 hover:border-neutral-300";
@@ -105,12 +105,8 @@ const MonthlyCard = ({
             className="card-todos flex items-center text-sm   text-neutral-700 mt-2"
             onClick={() => toggleTodoCompletion(index)}
           >
-            {completedTodos.includes(index) ? <LuCheckSquare /> : <LuSquare />}
-            <span
-              className={`ml-1 ${
-                completedTodos.includes(index) && "line-through"
-              }`}
-            >
+            {todo.completed ? <LuCheckSquare /> : <LuSquare />}
+            <span className={`ml-1 ${todo.completed && "line-through"}`}>
               {todo.task}
             </span>
           </p>

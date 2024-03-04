@@ -5,11 +5,15 @@ import AddMonthlyCard from "./AddMonthlyCard";
 import DropIndicator from "./DropIndicator";
 import TrashBin from "./TrashBin";
 import { formatDateDash } from "../../util/formatDate";
+import MonthlyWarningModal from "./Modal/MonthlyWarningModal";
 
 const MonthlyColumn = ({ week, column, cards, setCards }) => {
   const [active, setActive] = useState(false);
   const [columnWidth, setColumnWidth] = useState(0);
+  const [warning, setWarning] = useState(false);
   const columnRef = useRef(null);
+  const warningModal = useRef();
+
   // console.log(week.week);
   useEffect(() => {
     function handleResize() {
@@ -34,12 +38,15 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
 
   const handleDragStart = (e, card) => {
     e.dataTransfer.setData("cardId", card.subject);
+
+    setWarning(true);
   };
 
   const handleDragOver = (e) => {
     e.preventDefault();
     highlightIndicator(e);
     setActive(true);
+    setWarning(true);
   };
 
   const highlightIndicator = (e) => {
@@ -92,10 +99,11 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
     clearHighlights();
   };
 
-  const handleDragEnd = (e, card) => {
+  // console.log(warning);
+
+  const handleDragEnd = (e) => {
     setActive(false);
     clearHighlights();
-
     const cardId = e.dataTransfer.getData("cardId");
 
     const indicators = getIndicators();
@@ -107,18 +115,19 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
       let copy = [...cards];
 
       let cardToTransfer = copy.find((c) => c.subject === cardId);
-      console.log(cardToTransfer);
-      console.log(column);
-      console.log(week.monday);
-      console.log(week.sunday);
+
       let start = "";
       let end = "";
       if (cardToTransfer.column !== column) {
-        console.log("different column"); // modal ?
-        console.log(formatDateDash(new Date(week.monday)).slice(5));
+        console.log("different column");
+
+        // console.log(warningModal);
+        warningModal.current.open();
+
         start = formatDateDash(new Date(week.monday)).slice(5);
         end = formatDateDash(new Date(week.sunday)).slice(5);
       }
+
       if (!cardToTransfer) return;
 
       cardToTransfer = { ...cardToTransfer, column, start, end };
@@ -157,6 +166,17 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
 
   return (
     <>
+      {warning && (
+        <MonthlyWarningModal
+          ref={warningModal}
+          title="Week is being changed"
+          situation="You try to move the column into other week"
+          information="It will cause change of duration"
+          cancel="cancel"
+          confirm="okay"
+          setWarning={setWarning}
+        />
+      )}
       <section className="column" ref={columnRef}>
         <MonthlyColumnHeader
           week={week}
@@ -164,7 +184,7 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
           columnWidth={columnWidth}
         />
         <div
-          onDrop={handleDragEnd}
+          onDrop={(e) => handleDragEnd(e)}
           onDragLeave={handleDragLeave}
           onDragOver={handleDragOver}
           className={`column-body h-screen transition-colors ${
