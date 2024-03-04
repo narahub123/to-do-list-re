@@ -4,10 +4,29 @@ import { FaFire } from "react-icons/fa";
 
 const TrashBin = ({ cards, setCards }) => {
   const [active, setActive] = useState(false);
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setActive(true);
+  };
+
+  const handleDragLeave = (e) => {
+    setActive(false);
+  };
+
+  const handleDragEnd = (e) => {
+    const cardId = e.dataTransfer.getData("cardId");
+    // console.log(cardId);
+    setCards((pv) => pv.filter((c) => c.subject !== cardId));
+    setActive(false);
+  };
   return (
     <>
       {cards.length !== 0 ? (
         <div
+          onDrop={handleDragEnd}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
           className={`trash-bin flex place-content-center 
                     w-full p-2 text-sm mt-1.5 rounded border
                     ${

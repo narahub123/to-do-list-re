@@ -4,7 +4,16 @@ import { LuCheckSquare, LuSquare } from "react-icons/lu";
 import CircleProgressBar from "./CircleProgressBar";
 import DropIndicator from "./DropIndicator";
 
-const MonthlyCard = ({ id, subject, todos, start, end, column, colColor }) => {
+const MonthlyCard = ({
+  id,
+  subject,
+  todos,
+  start,
+  end,
+  column,
+  colColor,
+  handleDragStart,
+}) => {
   const [completedTodos, setCompletedTodos] = useState([]);
 
   const toggleTodoCompletion = (index) => {
@@ -62,6 +71,10 @@ const MonthlyCard = ({ id, subject, todos, start, end, column, colColor }) => {
     <>
       <DropIndicator beforeId={id} column={column} />
       <div
+        draggable="true"
+        onDragStart={(e) =>
+          handleDragStart(e, { id, subject, todos, start, end, column })
+        }
         className={`card-container p-3 cursor-grab rounded border 
                   bg-neutral-50 ${boardColor}
                    active:cursor-grabbing group`}

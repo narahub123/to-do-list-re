@@ -31,6 +31,10 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
   // filter cards which match the condition
   const filteredCards = cards.filter((c) => c.column === column);
 
+  const handleDragStart = (e, card) => {
+    e.dataTransfer.setData("cardId", card.subject);
+  };
+
   return (
     <section className="column" ref={columnRef}>
       <MonthlyColumnHeader
@@ -44,7 +48,14 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
         }`}
       >
         {filteredCards.map((c) => {
-          return <MonthlyCard key={c.id} colColor={week.colColor} {...c} />;
+          return (
+            <MonthlyCard
+              key={c.id}
+              colColor={week.colColor}
+              {...c}
+              handleDragStart={handleDragStart}
+            />
+          );
         })}
         <DropIndicator beforeId="-1" column={column} />
         <AddMonthlyCard
