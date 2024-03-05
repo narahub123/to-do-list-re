@@ -4,6 +4,7 @@ import { InputText, InputDate } from "./Input";
 import { formatDashDate, formatDateDash } from "../../util/formatDate";
 import MonthlyValidationModal from "./Modal/MonthlyValidationModal";
 import { motion } from "framer-motion";
+import { createMonthlyToDo } from "../../util/HandleAPI";
 
 const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
   const [adding, setAdding] = useState(false);
@@ -107,6 +108,15 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
     setAdding(false);
 
     // console.log(inputs);
+
+    createMonthlyToDo({
+      data: {
+        subject: subject,
+        start: start,
+        end: end,
+        todos: todos,
+      },
+    });
 
     setCards((prevCards) => [
       ...prevCards,
