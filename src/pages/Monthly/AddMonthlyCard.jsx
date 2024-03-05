@@ -111,6 +111,7 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
 
     createMonthlyToDo({
       data: {
+        column: column,
         subject: subject,
         start: start,
         end: end,

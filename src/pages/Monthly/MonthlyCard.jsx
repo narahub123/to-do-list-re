@@ -4,21 +4,17 @@ import { LuCheckSquare, LuSquare } from "react-icons/lu";
 import CircleProgressBar from "./CircleProgressBar";
 import DropIndicator from "./DropIndicator";
 import { motion } from "framer-motion";
+import { formatDateDash } from "../../util/formatDate";
 
-const MonthlyCard = ({
-  id,
-  subject,
-  todos,
-  start,
-  end,
-  column,
-  colColor,
-  handleDragStart,
-}) => {
+const MonthlyCard = ({ id, data, colColor, handleDragStart }) => {
   const [completedTodos, setCompletedTodos] = useState([]);
 
+  const { subject, start, end, todos, column } = data;
+
+  console.log(id, data.todos, colColor);
+
   const toggleTodoCompletion = (index) => {
-    const updatedTodos = [...todos];
+    const updatedTodos = [...data.todos];
     updatedTodos[index].completed = !updatedTodos[index].completed;
 
     if (completedTodos.includes(index)) {
@@ -70,7 +66,7 @@ const MonthlyCard = ({
 
   return (
     <>
-      <DropIndicator beforeId={subject} column={column} />
+      <DropIndicator beforeId={id} column={column} />
       <motion.div
         layout
         layoutId={id}
@@ -91,11 +87,11 @@ const MonthlyCard = ({
         </div>
         <p className={`card-date border-b-2 text-right pl-0.5 ${boardColor}`}>
           <span className="start-date text-xs pr-0.5 text-neutral-500">
-            {start}
+            {formatDateDash(start).slice(5)}
           </span>
           <span className="text-xs text-neutral-500">~</span>
           <span className="end-date text-xs pl-0.5 text-neutral-500">
-            {end}
+            {formatDateDash(end).slice(5)}
           </span>
         </p>
 

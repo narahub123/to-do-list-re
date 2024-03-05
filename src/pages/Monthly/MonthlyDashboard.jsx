@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import MonthlyHeader from "./MonthlyHeader";
 import MonthlyColumn from "./MonthlyColumn";
 // import { weeksInMonth } from "../../util/weekInMonth";
 import { getWeeksInMonth } from "../../util/getWeeksInMonth";
+import { getAllMonthlyToDo } from "../../util/HandleAPI";
 
 const MonthlyDashboard = () => {
   const today = new Date();
@@ -21,7 +22,26 @@ const MonthlyDashboard = () => {
   // console.log(year);
   // console.log(month);
   // console.log(date);
-  const [cards, setCards] = useState([]);
+  const [cards, setCards] = useState([
+    {
+      user: "",
+      data: {
+        column: 0,
+        subject: "",
+        start: "",
+        end: "",
+        todos: [{ task: "", completed: false }],
+      },
+      id: "",
+      next: null,
+    },
+  ]);
+
+  // console.log(cards);
+
+  useEffect(() => {
+    getAllMonthlyToDo(setCards);
+  }, []);
 
   const filteredWeeksInMonth = getWeeksInMonth(year, month, date);
 

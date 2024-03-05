@@ -32,9 +32,8 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
     };
   }, []);
 
-  // console.log(cards);
   // filter cards which match the condition
-  const filteredCards = cards.filter((c) => c.column === column);
+  const filteredCards = cards.filter((c) => c.data.column === column);
 
   const handleDragStart = (e, card) => {
     e.dataTransfer.setData("cardId", card.subject);
