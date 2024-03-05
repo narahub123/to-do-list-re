@@ -197,6 +197,7 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
                 colColor={week.colColor}
                 {...c}
                 handleDragStart={handleDragStart}
+                setCards={setCards}
               />
             );
           })}

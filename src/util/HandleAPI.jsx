@@ -59,4 +59,16 @@ const getAllMonthlyToDo = (setCards) => {
     });
 };
 
-export { createMonthlyToDo, getAllMonthlyToDo };
+const deleteMonthlyToDo = (id, setCards) => {
+  axios
+    .delete(`${baseUrl}/${id}`)
+    .then((res) => {
+      console.log(res);
+      getAllMonthlyToDo(setCards);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export { createMonthlyToDo, getAllMonthlyToDo, deleteMonthlyToDo };

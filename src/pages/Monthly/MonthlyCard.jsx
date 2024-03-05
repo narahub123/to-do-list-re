@@ -5,13 +5,19 @@ import CircleProgressBar from "./CircleProgressBar";
 import DropIndicator from "./DropIndicator";
 import { motion } from "framer-motion";
 import { formatDateDash } from "../../util/formatDate";
+import { deleteMonthlyToDo } from "../../util/HandleAPI";
 
-const MonthlyCard = ({ id, data, colColor, handleDragStart }) => {
+const MonthlyCard = ({ id, data, colColor, handleDragStart, setCards }) => {
   const [completedTodos, setCompletedTodos] = useState([]);
 
   const { subject, start, end, todos, column } = data;
 
-  console.log(id, data.todos, colColor);
+  // console.log(id, data.todos, colColor);
+
+  const handleDeleteCard = (id) => {
+    console.log(id);
+    deleteMonthlyToDo(id, setCards);
+  };
 
   const toggleTodoCompletion = (index) => {
     const updatedTodos = [...data.todos];
@@ -26,11 +32,11 @@ const MonthlyCard = ({ id, data, colColor, handleDragStart }) => {
     }
   };
 
-  console.log(completedTodos);
+  // console.log(completedTodos);
 
-  for (let completedTodo of completedTodos) {
-    console.log(todos[completedTodo]);
-  }
+  // for (let completedTodo of completedTodos) {
+  //   console.log(todos[completedTodo]);
+  // }
 
   // console.log(colColor);
   let boardColor = "border-neutral-700 hover:border-neutral-300";
@@ -82,7 +88,10 @@ const MonthlyCard = ({ id, data, colColor, handleDragStart }) => {
           <p className="subject text-base text-neutral-700">{subject}</p>
           <p className="control-icons flex gap-1 text-neutral-700">
             <FiEdit className="card-edit hover:text-neutral-500" />
-            <FiTrash className="card-delete hover:text-neutral-500" />
+            <FiTrash
+              onClick={() => handleDeleteCard(id)}
+              className="card-delete hover:text-neutral-500"
+            />
           </p>
         </div>
         <p className={`card-date border-b-2 text-right pl-0.5 ${boardColor}`}>
