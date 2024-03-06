@@ -6,6 +6,7 @@ import DropIndicator from "./DropIndicator";
 import TrashBin from "./TrashBin";
 import { formatDateDash } from "../../util/formatDate";
 import MonthlyWarningModal from "./Modal/MonthlyWarningModal";
+import { getSingleMonthlyToDo, updateMonthlyToDo } from "../../util/HandleAPI";
 
 const MonthlyColumn = ({ week, column, cards, setCards }) => {
   const [active, setActive] = useState(false);
@@ -36,7 +37,7 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
   const filteredCards = cards.filter((c) => c.data.column === column);
 
   const handleDragStart = (e, card) => {
-    e.dataTransfer.setData("cardId", card.subject);
+    e.dataTransfer.setData("cardId", card.id);
 
     setWarning(true);
   };
@@ -103,47 +104,101 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
   const handleDragEnd = (e) => {
     setActive(false);
     clearHighlights();
-    const cardId = e.dataTransfer.getData("cardId");
 
+    // get id of dragged card
+    const cardId = e.dataTransfer.getData("cardId");
+    console.log(cardId);
+
+    // gete all indicators
     const indicators = getIndicators();
+
+    // find a nearest indicator
     const { element } = getNearestIndicator(e, indicators);
 
+    // set before either indicator's before or -1
     const before = element.dataset.before || "-1";
+    console.log("before", before);
+    const after = element.dataset.after || "-1";
+    console.log("after", after);
 
+    // if before is not equal to cardId which means if the card moves to other position
     if (before !== cardId) {
+      // copy all the cards
       let copy = [...cards];
+      console.log(copy);
 
-      let cardToTransfer = copy.find((c) => c.subject === cardId);
+      const lastCard = filteredCards[filteredCards.length - 1];
+      console.log("lastCard: ", lastCard);
+      const lastCardId = lastCard.id;
 
-      let start = "";
-      let end = "";
-      if (cardToTransfer.column !== column) {
+      // find a card which is the same card dragged among the copy cards
+      let cardToTransfer = copy.find((c) => c.id === cardId);
+      console.log("current card: ", cardToTransfer);
+
+      let start = cardToTransfer.data.start;
+      let end = cardToTransfer.data.end;
+
+      // if the card moves to a different column
+      if (cardToTransfer.data.column !== column) {
         console.log("different column");
 
         // console.log(warningModal);
         warningModal.current.open();
-
-        start = formatDateDash(new Date(week.monday)).slice(5);
-        end = formatDateDash(new Date(week.sunday)).slice(5);
+        start = new Date(week.monday);
+        end = new Date(week.sunday);
       }
 
+      // if there is no card matched to the dragged card
       if (!cardToTransfer) return;
 
-      cardToTransfer = { ...cardToTransfer, column, start, end };
-      console.log(cardToTransfer);
-      copy = copy.filter((c) => c.subject !== cardId);
+      // update the dragged card property
+      cardToTransfer = {
+        ...cardToTransfer,
+        data: { ...cardToTransfer.data, column, start, end },
+      };
+      // console.log("current modified: ", cardToTransfer);
 
+      // filter copy cards which is not dragged
+      copy = copy.filter((c) => c.id !== cardId);
+
+      // if before = -1 which means moving to the bottom on the column
       const moveToBack = before === "-1";
 
+      // if dragged card moves to the bottom
       if (moveToBack) {
+        // add dragged card to copy cards array at the end
         copy.push(cardToTransfer);
+        // former card : lastCardId
+        // currenly card : cardId
+
+        let last = "";
+        getSingleMonthlyToDo(lastCardId).then((resolve) => {
+          console.log(resolve);
+          last = resolve;
+        });
+
+        console.log(last);
+
+        updateMonthlyToDo(
+          { id: lastCardId, data: { ...lastCard.data }, next: cardId },
+          cards,
+          setCards
+        );
+        getSingleMonthlyToDo(cardId);
+        console.log(cardToTransfer.next);
+        updateMonthlyToDo(
+          { id: cardId, data: { ...cardToTransfer.data }, next: null },
+          cards,
+          setCards
+        );
       } else {
-        const insertAtIndex = copy.findIndex((el) => el.subject === before);
+        // add dragged card to copy cards among the array
+        const insertAtIndex = copy.findIndex((el) => el.id === before);
         if (insertAtIndex === undefined) return;
 
         copy.splice(insertAtIndex, 0, cardToTransfer);
       }
-
+      console.log(before);
       setCards(copy);
     }
   };
@@ -196,13 +251,14 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
                 key={c.id}
                 colColor={week.colColor}
                 {...c}
+                next={c.next}
                 handleDragStart={handleDragStart}
                 cards={cards}
                 setCards={setCards}
               />
             );
           })}
-          <DropIndicator beforeId="-1" column={column} />
+          <DropIndicator beforeId="-1" afterId={null} column={column} />
           <AddMonthlyCard
             key={week.week}
             column={column}

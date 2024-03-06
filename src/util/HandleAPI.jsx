@@ -69,7 +69,6 @@ const getAllMonthlyToDo = (setCards) => {
   axios
     .get(baseUrl)
     .then((res) => {
-      console.log(res.data);
       let plans = res.data;
       setCards(
         plans.map((plan) => ({
@@ -95,14 +94,18 @@ const getAllMonthlyToDo = (setCards) => {
 };
 
 const getSingleMonthlyToDo = (id) => {
-  axios
-    .get(`${baseUrl}/${id}`)
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${baseUrl}/${id}`)
+      .then((res) => {
+        console.log(res.data);
+        resolve(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+  });
 };
 
 const deleteMonthlyToDo = (id, setCards) => {
@@ -131,7 +134,7 @@ const updateMonthlyToDo = (
     next,
   };
 
-  console.log(column, subject, start, end, todos, next);
+  console.log(id, column, subject, start, end, todos, next);
   axios
     .patch(`${baseUrl}/${id}`, updatedData)
     .then((res) => {

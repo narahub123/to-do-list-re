@@ -10,6 +10,7 @@ import { deleteMonthlyToDo, updateMonthlyToDo } from "../../util/HandleAPI";
 const MonthlyCard = ({
   id,
   data,
+  next,
   colColor,
   handleDragStart,
   cards,
@@ -140,7 +141,7 @@ const MonthlyCard = ({
 
   return (
     <>
-      <DropIndicator beforeId={id} column={column} />
+      <DropIndicator beforeId={id} afterId={next} column={column} />
       <motion.div
         layout
         layoutId={id}
