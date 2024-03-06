@@ -26,7 +26,7 @@ const MonthlyCard = ({
 
   const { todos } = data;
   // console.log(cards);
-  console.log(data.todos);
+  // console.log(data.todos);
 
   const handleDeleteCard = (id) => {
     deleteMonthlyToDo(id, setCards);
@@ -59,11 +59,12 @@ const MonthlyCard = ({
     console.log(subject, start, end, todos);
   };
 
-  const updateCard = (id, column, subject, start, end, todos) => {
+  const updateCard = (id, column, subject, start, end, todos, next) => {
     updateMonthlyToDo(
       {
         id,
         data: { column, subject, start, end, todos },
+        next,
       },
       cards,
       setCards

@@ -4,6 +4,7 @@ const baseUrl = "http://localhost:3000";
 
 const createMonthlyToDo = ({
   data: { column, subject, start, end, todos },
+  cards,
   setCards,
 }) => {
   if (!column || !subject || !start || !end || !Array.isArray(todos)) {
@@ -42,6 +43,22 @@ const createMonthlyToDo = ({
       //   console.log(cards);
       //   console.log(newCard);
       setCards((cards) => [...cards, newCard]);
+
+      const columnCards = cards.filter(
+        (c) => c.data.column === response.data.column
+      );
+
+      const lastCard = columnCards.find((c) => c.next === null);
+
+      updateMonthlyToDo(
+        {
+          id: lastCard.id,
+          data: lastCard.data,
+          next: response._id,
+        },
+        cards,
+        setCards
+      );
     })
     .catch((err) => {
       console.log(err);
@@ -101,7 +118,7 @@ const deleteMonthlyToDo = (id, setCards) => {
 };
 
 const updateMonthlyToDo = (
-  { id, data: { column, subject, start, end, todos } },
+  { id, data: { column, subject, start, end, todos }, next },
   cards,
   setCards
 ) => {
@@ -111,9 +128,10 @@ const updateMonthlyToDo = (
     start,
     end,
     todos,
+    next,
   };
 
-  console.log(column, subject, start, end, todos);
+  console.log(column, subject, start, end, todos, next);
   axios
     .patch(`${baseUrl}/${id}`, updatedData)
     .then((res) => {

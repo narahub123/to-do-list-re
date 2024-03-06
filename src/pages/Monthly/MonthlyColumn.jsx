@@ -206,6 +206,7 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
           <AddMonthlyCard
             key={week.week}
             column={column}
+            cards={cards}
             setCards={setCards}
             week={week}
             columnWidth={columnWidth}

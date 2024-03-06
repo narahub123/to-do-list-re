@@ -6,7 +6,7 @@ import MonthlyValidationModal from "./Modal/MonthlyValidationModal";
 import { motion } from "framer-motion";
 import { createMonthlyToDo } from "../../util/HandleAPI";
 
-const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
+const AddMonthlyCard = ({ column, cards, setCards, week, columnWidth }) => {
   const [adding, setAdding] = useState(false);
   const [todoInputs, setTodoInputs] = useState([
     { task: "", completed: false },
@@ -117,6 +117,7 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
         end: end,
         todos: todos,
       },
+      cards,
       setCards,
     });
   };
