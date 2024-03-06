@@ -34,7 +34,7 @@ const getAllMonthlyToDo = (setCards) => {
   axios
     .get(baseUrl)
     .then((res) => {
-      //   console.log(res.data);
+      console.log(res.data);
       let plans = res.data;
       setCards(
         plans.map((plan) => ({
@@ -71,4 +71,44 @@ const deleteMonthlyToDo = (id, setCards) => {
     });
 };
 
-export { createMonthlyToDo, getAllMonthlyToDo, deleteMonthlyToDo };
+const updateMonthlyToDo = (
+  { id, data: { column, subject, start, end, todos } },
+  cards,
+  setCards
+) => {
+  const updatedData = {
+    column,
+    subject,
+    start,
+    end,
+    todos,
+  };
+
+  console.log(column, subject, start, end, todos);
+  axios
+    .patch(`${baseUrl}/${id}`, updatedData)
+    .then((res) => {
+      //   console.log(res.config.data);
+      const updatedCardData = res.config.data;
+
+      const updatedCards = [...cards];
+
+      const index = updatedCards.findIndex(
+        (card) => card.id === updatedCardData.id
+      );
+      if (index !== -1) {
+        updatedCards[index] = updatedCardData;
+        setCards(updatedCards);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export {
+  createMonthlyToDo,
+  getAllMonthlyToDo,
+  deleteMonthlyToDo,
+  updateMonthlyToDo,
+};
