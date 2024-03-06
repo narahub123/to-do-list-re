@@ -4,6 +4,7 @@ const baseUrl = "http://localhost:3000";
 
 const createMonthlyToDo = ({
   data: { column, subject, start, end, todos },
+  setCards,
 }) => {
   if (!column || !subject || !start || !end || !Array.isArray(todos)) {
     console.error("Invalid parameters provided");
@@ -23,7 +24,24 @@ const createMonthlyToDo = ({
   axios
     .post(`${baseUrl}/save`, { data: data })
     .then((res) => {
-      console.log(res.data);
+      //   console.log(res.data.data.column);
+      const response = res.data;
+      const newCard = {
+        user: response.user,
+
+        data: {
+          column: response.data.column,
+          subject: response.data.subject,
+          start: response.data.start,
+          end: response.data.end,
+          todos: response.data.todos,
+        },
+        id: response._id,
+        next: response.next,
+      };
+      //   console.log(cards);
+      //   console.log(newCard);
+      setCards((cards) => [...cards, newCard]);
     })
     .catch((err) => {
       console.log(err);
@@ -53,6 +71,17 @@ const getAllMonthlyToDo = (setCards) => {
           next: plan.next,
         }))
       );
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+const getSingleMonthlyToDo = (id) => {
+  axios
+    .get(`${baseUrl}/${id}`)
+    .then((res) => {
+      console.log(res);
     })
     .catch((err) => {
       console.log(err);
@@ -111,4 +140,5 @@ export {
   getAllMonthlyToDo,
   deleteMonthlyToDo,
   updateMonthlyToDo,
+  getSingleMonthlyToDo,
 };

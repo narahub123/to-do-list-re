@@ -117,18 +117,8 @@ const AddMonthlyCard = ({ column, setCards, week, columnWidth }) => {
         end: end,
         todos: todos,
       },
+      setCards,
     });
-
-    setCards((prevCards) => [
-      ...prevCards,
-      {
-        column: week.weekNum,
-        subject,
-        start: formatDateDash(start).slice(5),
-        end: formatDateDash(end).slice(5),
-        todos,
-      },
-    ]);
   };
 
   return (
