@@ -53,20 +53,20 @@ const MonthlyWarningModal = forwardRef(
             <h2 className="text-xl font-bold text-stone-700 my-4">{title}</h2>
             <p className="text-stone-600 mb-4">{situation}</p>
             <p className="text-stone-600 mb-4">{information}</p>
-            <p className="flex justify-end">
+            <p className="flex justify-between outline-none">
               <form
                 onClick={handleCancel}
                 method="dialog"
-                className="mt-4 text-right"
+                className="mt-4 text-right hover:text-neutral-500 outline-none"
               >
-                <button>{cancel}</button>
+                <button className="outline-none">{cancel}</button>
               </form>
               <form
                 onClick={handleConfirm}
                 method="dialog"
-                className="mt-4 text-right"
+                className="mt-4 text-right hover:text-neutral-500 outline-none"
               >
-                <button>{confirm}</button>
+                <button className="outline-none">{confirm}</button>
               </form>
             </p>
           </>
