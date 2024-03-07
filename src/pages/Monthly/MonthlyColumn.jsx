@@ -130,10 +130,6 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
       let copy = [...cards];
       console.log(copy);
 
-      const lastCard = filteredCards[filteredCards.length - 1];
-      console.log("lastCard: ", lastCard);
-      const lastCardId = lastCard.id;
-
       // find a card which is the same card dragged among the copy cards
       let cardToTransfer = copy.find((c) => c.id === cardId);
       console.log("current card: ", cardToTransfer);
@@ -171,16 +167,53 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
       if (moveToBack) {
         // add dragged card to copy cards array at the end
         copy.push(cardToTransfer);
-        // former card : lastCardId
-        // currenly card : cardId
+        console.log(cardToTransfer);
+        updateMonthlyToDo(
+          {
+            id: cardToTransfer.id,
+            data: cardToTransfer.data,
+            createdAt: Date.now(),
+          },
+          cards,
+          setCards
+        );
       } else {
         // add dragged card to copy cards among the array
         const insertAtIndex = copy.findIndex((el) => el.id === before);
+        console.log(insertAtIndex);
         if (insertAtIndex === undefined) return;
 
+        updateMonthlyToDo(
+          {
+            id: cardToTransfer.id,
+            data: cardToTransfer.data,
+            createdAt: Date.now(),
+          },
+          cards,
+          setCards
+        );
+
+        const afterAtIndex = copy.filter(
+          (c, index) => index >= insertAtIndex && c.data.column === column
+        );
+
+        console.log(afterAtIndex);
+        for (let after of afterAtIndex) {
+          console.log(after);
+          updateMonthlyToDo(
+            {
+              id: after.id,
+              data: after.data,
+              createdAt: Date.now(),
+            },
+            cards,
+            setCards
+          );
+        }
         copy.splice(insertAtIndex, 0, cardToTransfer);
       }
       console.log(before);
+
       setCards(copy);
     }
   };

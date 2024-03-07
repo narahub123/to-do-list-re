@@ -105,7 +105,7 @@ const deleteMonthlyToDo = (id, setCards) => {
 };
 
 const updateMonthlyToDo = (
-  { id, data: { column, subject, start, end, todos } },
+  { id, data: { column, subject, start, end, todos }, createdAt },
   cards,
   setCards
 ) => {
@@ -115,9 +115,10 @@ const updateMonthlyToDo = (
     start,
     end,
     todos,
+    createdAt
   };
 
-  console.log(id, column, subject, start, end, todos);
+  console.log(id, column, subject, start, end, todos, createdAt);
   axios
     .patch(`${baseUrl}/${id}`, updatedData)
     .then((res) => {
