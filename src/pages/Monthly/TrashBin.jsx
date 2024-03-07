@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FiTrash } from "react-icons/fi";
 import { FaFire } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { deleteMonthlyToDo } from "../../util/HandleAPI";
 
 const TrashBin = ({ cards, setCards }) => {
   const [active, setActive] = useState(false);
@@ -17,8 +18,8 @@ const TrashBin = ({ cards, setCards }) => {
 
   const handleDragEnd = (e) => {
     const cardId = e.dataTransfer.getData("cardId");
-    // console.log(cardId);
-    setCards((pv) => pv.filter((c) => c.subject !== cardId));
+    console.log(cardId);
+    deleteMonthlyToDo(cardId, setCards);
     setActive(false);
   };
   return (
