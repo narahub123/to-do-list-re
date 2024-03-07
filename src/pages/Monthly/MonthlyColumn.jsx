@@ -10,9 +10,9 @@ import { updateMonthlyToDo } from "../../util/HandleAPI";
 const MonthlyColumn = ({ week, column, cards, setCards }) => {
   const [active, setActive] = useState(false);
   const [columnWidth, setColumnWidth] = useState(0);
-  const [warning, setWarning] = useState(false);
+
   const columnRef = useRef(null);
-  const warningModal = useRef();
+
   const [createdAt, setCreatedAt] = useState();
 
   // console.log(week.week);
@@ -140,8 +140,6 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
       if (cardToTransfer.data.column !== column) {
         console.log("different column");
 
-        // console.log(warningModal);
-        warningModal.current.open();
         start = new Date(week.monday);
         end = new Date(week.sunday);
       }
@@ -234,17 +232,6 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
 
   return (
     <>
-      {warning && (
-        <MonthlyWarningModal
-          ref={warningModal}
-          title="Week is being changed"
-          situation="You try to move the column into other week"
-          information="It will cause change of duration"
-          cancel="cancel"
-          confirm="okay"
-          setWarning={setWarning}
-        />
-      )}
       <section className="column" ref={columnRef}>
         <MonthlyColumnHeader
           week={week}
