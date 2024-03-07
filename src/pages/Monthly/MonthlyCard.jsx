@@ -10,27 +10,47 @@ import { deleteMonthlyToDo, updateMonthlyToDo } from "../../util/HandleAPI";
 const MonthlyCard = ({
   id,
   data,
-  next,
+  createdAt,
+  setCreatedAt,
   colColor,
   handleDragStart,
   cards,
   setCards,
 }) => {
-  const [completedTodos, setCompletedTodos] = useState([]);
   const [updating, setUpdating] = useState(false);
   const [subject, setSubject] = useState(data.subject);
   const [start, setStart] = useState(data.start);
   const [end, setEnd] = useState(data.end);
-  // const [todos, setTodos] = useState(data.todos);
-  const [task, setTask] = useState(data.todos.task);
-  const [column, setColumn] = useState(data.column);
 
-  const { todos } = data;
+  const { todos, column } = data;
+
   // console.log(cards);
-  // console.log(data.todos);
+  // console.log(todos);
 
   const handleDeleteCard = (id) => {
     deleteMonthlyToDo(id, setCards);
+  };
+
+  const handleTaskInputChange = (field, value, taskIndex) => {
+    setCards((cards) => {
+      return cards.map((c) => {
+        if (c.id === id) {
+          return {
+            ...c,
+            data: {
+              ...c.data,
+              todos: c.data.todos.map((todo, index) => {
+                if (index === taskIndex) {
+                  return { ...todo, [field]: value };
+                }
+                return todo;
+              }),
+            },
+          };
+        }
+        return c;
+      });
+    });
   };
 
   const handleInputChange = (field, value) => {
@@ -40,8 +60,6 @@ const MonthlyCard = ({
       setStart(value);
     } else if (field === "end") {
       setEnd(value);
-    } else if (field === "task") {
-      setTask(value);
     }
 
     setCards((cards) => {
@@ -55,17 +73,18 @@ const MonthlyCard = ({
           [field]: value,
         };
       }
+
+      console.log(updatedCards);
       return updatedCards;
     });
-    console.log(subject, start, end, todos);
+    console.log(subject, start, end);
   };
 
-  const updateCard = (id, column, subject, start, end, todos, next) => {
+  const updateCard = (id, column, subject, start, end, todos) => {
     updateMonthlyToDo(
       {
         id,
         data: { column, subject, start, end, todos },
-        next,
       },
       cards,
       setCards
@@ -83,25 +102,32 @@ const MonthlyCard = ({
   };
 
   const toggleTodoCompletion = (index) => {
-    const updatedTodos = [...data.todos];
-    updatedTodos[index].completed = !updatedTodos[index].completed;
+    setCards((cards) => {
+      const updatedCards = [...cards];
+      const cardIndex = updatedCards.findIndex((c) => c.id === id);
+      const updatedTodos = [...updatedCards[cardIndex].data.todos];
+      updatedTodos[index] = {
+        ...updatedTodos[index],
+        completed: !updatedTodos[index].completed,
+      };
+      updatedCards[cardIndex].data.todos = updatedTodos;
 
-    if (completedTodos.includes(index)) {
-      setCompletedTodos(
-        completedTodos.filter((todoIndex) => todoIndex !== index)
+      console.log(updatedCards[cardIndex].data.todos);
+
+      const todos = updatedCards[cardIndex].data.todos;
+
+      updateMonthlyToDo(
+        {
+          id,
+          data: { column, subject, start, end, todos },
+        },
+        cards,
+        setCards
       );
-    } else {
-      setCompletedTodos([...completedTodos, index]);
-    }
+      return updatedCards;
+    });
   };
 
-  // console.log(completedTodos);
-
-  // for (let completedTodo of completedTodos) {
-  //   console.log(todos[completedTodo]);
-  // }
-
-  // console.log(colColor);
   let boardColor = "border-neutral-700 hover:border-neutral-300";
   let bgColor = "bg-neutral-100";
 
@@ -139,15 +165,24 @@ const MonthlyCard = ({
   }
   let percentage = Math.floor((trueCount / todosSize) * 100);
 
+  // console.log(cards);
+  // console.log(todos);
   return (
     <>
-      <DropIndicator beforeId={id} afterId={next} column={column} />
+      <DropIndicator beforeId={id} column={column} />
       <motion.div
         layout
         layoutId={id}
         draggable="true"
         onDragStart={(e) =>
-          handleDragStart(e, { id, subject, todos, start, end, column })
+          handleDragStart(e, {
+            id,
+            subject,
+            todos,
+            start,
+            end,
+            column,
+          })
         }
         className={`card-container p-3 cursor-grab rounded border 
                   bg-neutral-50 ${boardColor}
@@ -180,20 +215,26 @@ const MonthlyCard = ({
               />
             </p>
 
-            {todos.map((todo, index) => (
-              <p
-                key={index}
-                className="card-todos flex items-center text-sm   text-neutral-700 mt-2 "
-                onClick={() => toggleTodoCompletion(index)}
-              >
-                <input
-                  type="text"
-                  className={`task text-base w-full text-neutral-700 ${bgColor}`}
-                  defaultValue={todo.task}
-                  onChange={(e) => handleInputChange("task", e.target.value)}
-                />
-              </p>
-            ))}
+            {cards.map((c) => {
+              if (c.id === id) {
+                return c.data.todos.map((todo, index) => (
+                  <p
+                    key={index}
+                    className="card-todos flex items-center text-sm text-neutral-700 mt-2"
+                  >
+                    <input
+                      type="text"
+                      className={`task text-base w-full text-neutral-700 ${bgColor}`}
+                      defaultValue={todo.task}
+                      onChange={(e) =>
+                        handleTaskInputChange("task", e.target.value, index)
+                      }
+                    />
+                  </p>
+                ));
+              }
+            })}
+
             <p className="control-icons flex justify-end mt-2 gap-1 text-neutral-700">
               <FiSave
                 onClick={() =>
@@ -234,18 +275,27 @@ const MonthlyCard = ({
               </span>
             </p>
 
-            {todos.map((todo, index) => (
-              <p
-                key={index}
-                className="card-todos flex items-center text-sm   text-neutral-700 mt-2"
-                onClick={() => toggleTodoCompletion(index)}
-              >
-                {todo.completed ? <LuCheckSquare /> : <LuSquare />}
-                <span className={`ml-1 ${todo.completed && "line-through"}`}>
-                  {todo.task}
-                </span>
-              </p>
-            ))}
+            {cards.map((c) => {
+              if (c.id === id) {
+                return c.data.todos.map((todo, index) => (
+                  <p
+                    key={index}
+                    className="card-todos flex items-center text-sm text-neutral-700 mt-2"
+                    onClick={() => toggleTodoCompletion(index)}
+                  >
+                    {todo.completed ? <LuCheckSquare /> : <LuSquare />}
+                    <span
+                      className={`ml-1 ${todo.completed && "line-through"}`}
+                    >
+                      {todo.task}
+                    </span>
+                  </p>
+                ));
+              } else {
+                return null;
+              }
+            })}
+
             <p className="flex justify-center">
               <CircleProgressBar
                 percentage={percentage}

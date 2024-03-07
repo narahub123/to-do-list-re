@@ -14,6 +14,7 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
   const [warning, setWarning] = useState(false);
   const columnRef = useRef(null);
   const warningModal = useRef();
+  const [createdAt, setCreatedAt] = useState();
 
   // console.log(week.week);
   useEffect(() => {
@@ -35,6 +36,8 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
 
   // filter cards which match the condition
   const filteredCards = cards.filter((c) => c.data.column === column);
+
+  // console.log(filteredCards);
 
   const handleDragStart = (e, card) => {
     e.dataTransfer.setData("cardId", card.id);
@@ -170,27 +173,6 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
         copy.push(cardToTransfer);
         // former card : lastCardId
         // currenly card : cardId
-
-        let last = "";
-        getSingleMonthlyToDo(lastCardId).then((resolve) => {
-          console.log(resolve);
-          last = resolve;
-        });
-
-        console.log(last);
-
-        updateMonthlyToDo(
-          { id: lastCardId, data: { ...lastCard.data }, next: cardId },
-          cards,
-          setCards
-        );
-        getSingleMonthlyToDo(cardId);
-        console.log(cardToTransfer.next);
-        updateMonthlyToDo(
-          { id: cardId, data: { ...cardToTransfer.data }, next: null },
-          cards,
-          setCards
-        );
       } else {
         // add dragged card to copy cards among the array
         const insertAtIndex = copy.findIndex((el) => el.id === before);
@@ -251,7 +233,8 @@ const MonthlyColumn = ({ week, column, cards, setCards }) => {
                 key={c.id}
                 colColor={week.colColor}
                 {...c}
-                next={c.next}
+                createdAt={createdAt}
+                setCreatedAt={setCreatedAt}
                 handleDragStart={handleDragStart}
                 cards={cards}
                 setCards={setCards}

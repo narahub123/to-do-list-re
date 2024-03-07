@@ -25,8 +25,8 @@ const createMonthlyToDo = ({
   axios
     .post(`${baseUrl}/save`, { data: data })
     .then((res) => {
-      //   console.log(res.data.data.column);
       const response = res.data;
+      console.log(response);
       const newCard = {
         user: response.user,
 
@@ -38,27 +38,11 @@ const createMonthlyToDo = ({
           todos: response.data.todos,
         },
         id: response._id,
-        next: response.next,
+        createdAt: response.createdAt,
       };
       //   console.log(cards);
       //   console.log(newCard);
       setCards((cards) => [...cards, newCard]);
-
-      const columnCards = cards.filter(
-        (c) => c.data.column === response.data.column
-      );
-
-      const lastCard = columnCards.find((c) => c.next === null);
-
-      updateMonthlyToDo(
-        {
-          id: lastCard.id,
-          data: lastCard.data,
-          next: response._id,
-        },
-        cards,
-        setCards
-      );
     })
     .catch((err) => {
       console.log(err);
@@ -84,7 +68,7 @@ const getAllMonthlyToDo = (setCards) => {
             })),
           },
           id: plan._id,
-          next: plan.next,
+          createdAt: plan.createdAt,
         }))
       );
     })
@@ -121,7 +105,7 @@ const deleteMonthlyToDo = (id, setCards) => {
 };
 
 const updateMonthlyToDo = (
-  { id, data: { column, subject, start, end, todos }, next },
+  { id, data: { column, subject, start, end, todos } },
   cards,
   setCards
 ) => {
@@ -131,14 +115,13 @@ const updateMonthlyToDo = (
     start,
     end,
     todos,
-    next,
   };
 
-  console.log(id, column, subject, start, end, todos, next);
+  console.log(id, column, subject, start, end, todos);
   axios
     .patch(`${baseUrl}/${id}`, updatedData)
     .then((res) => {
-      //   console.log(res.config.data);
+      console.log(res.config.data);
       const updatedCardData = res.config.data;
 
       const updatedCards = [...cards];

@@ -33,7 +33,7 @@ const MonthlyDashboard = () => {
         todos: [{ task: "", completed: false }],
       },
       id: "",
-      next: null,
+      createdAt: null,
     },
   ]);
 
