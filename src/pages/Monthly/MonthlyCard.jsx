@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { FiEdit, FiTrash, FiSave, FiRotateCcw } from "react-icons/fi";
 import { LuCheckSquare, LuSquare } from "react-icons/lu";
 import CircleProgressBar from "./CircleProgressBar";
@@ -6,23 +6,25 @@ import DropIndicator from "./DropIndicator";
 import { motion } from "framer-motion";
 import { formatDateDash } from "../../util/formatDate";
 import { deleteMonthlyToDo, updateMonthlyToDo } from "../../util/HandleAPI";
+import MonthlyWarningModal from "./Modal/MonthlyWarningModal";
 
 const MonthlyCard = ({
   id,
   data,
-  createdAt,
-  setCreatedAt,
   colColor,
   handleDragStart,
   cards,
   setCards,
 }) => {
+  const [warning, setWarning] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [subject, setSubject] = useState(data.subject);
   const [start, setStart] = useState(data.start);
   const [end, setEnd] = useState(data.end);
 
   const { todos, column } = data;
+
+  const warningModal = useRef();
 
   // console.log(cards);
   // console.log(todos);
@@ -167,8 +169,28 @@ const MonthlyCard = ({
 
   // console.log(cards);
   // console.log(todos);
+
+  const handleOpenWarningModal = () => {
+    setWarning(true);
+    console.log(warning);
+    console.log(warningModal);
+    warningModal.current.open();
+  };
   return (
     <>
+      {warning && (
+        <MonthlyWarningModal
+          ref={warningModal}
+          title="Warning : Delete a To-Do"
+          situation="You are trying to delete a to-do list"
+          information="It can not be recovered"
+          cancel="cancel"
+          confirm="okay"
+          id={id}
+          handleDeleteCard={handleDeleteCard}
+          setWarning={() => setWarning(true)}
+        />
+      )}
       <DropIndicator beforeId={id} column={column} />
       <motion.div
         layout
@@ -258,7 +280,7 @@ const MonthlyCard = ({
                   className="card-edit hover:text-neutral-500"
                 />
                 <FiTrash
-                  onClick={() => handleDeleteCard(id)}
+                  onClick={handleOpenWarningModal}
                   className="card-delete hover:text-neutral-500"
                 />
               </p>

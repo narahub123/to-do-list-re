@@ -2,7 +2,19 @@ import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { createPortal } from "react-dom";
 
 const MonthlyWarningModal = forwardRef(
-  ({ title, situation, information, cancel, confirm, setWarning }, ref) => {
+  (
+    {
+      id,
+      title,
+      situation,
+      information,
+      cancel,
+      confirm,
+      setWarning,
+      handleDeleteCard,
+    },
+    ref
+  ) => {
     const dialog = useRef();
     // console.log(ref);
     useImperativeHandle(ref, () => {
@@ -22,10 +34,15 @@ const MonthlyWarningModal = forwardRef(
 
     const handleCancel = (e) => {
       e.stopPropagation();
+      dialog.current.close();
       setWarning(false);
     };
 
-    const handleConfirm = (e) => {};
+    const handleConfirm = (e) => {
+      console.log("hi");
+      handleDeleteCard(id);
+      setWarning(false);
+    };
     return createPortal(
       <div onClick={handleCloseBackdrop}>
         <dialog
@@ -37,13 +54,13 @@ const MonthlyWarningModal = forwardRef(
             <p className="text-stone-600 mb-4">{situation}</p>
             <p className="text-stone-600 mb-4">{information}</p>
             <p className="flex justify-end">
-              {/* <form
+              <form
                 onClick={handleCancel}
                 method="dialog"
                 className="mt-4 text-right"
               >
                 <button>{cancel}</button>
-              </form> */}
+              </form>
               <form
                 onClick={handleConfirm}
                 method="dialog"

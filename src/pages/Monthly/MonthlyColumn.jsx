@@ -4,9 +4,8 @@ import MonthlyCard from "./MonthlyCard";
 import AddMonthlyCard from "./AddMonthlyCard";
 import DropIndicator from "./DropIndicator";
 import TrashBin from "./TrashBin";
-import { formatDateDash } from "../../util/formatDate";
 import MonthlyWarningModal from "./Modal/MonthlyWarningModal";
-import { getSingleMonthlyToDo, updateMonthlyToDo } from "../../util/HandleAPI";
+import { updateMonthlyToDo } from "../../util/HandleAPI";
 
 const MonthlyColumn = ({ week, column, cards, setCards }) => {
   const [active, setActive] = useState(false);
